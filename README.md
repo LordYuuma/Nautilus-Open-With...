@@ -8,7 +8,6 @@ Simply copy `nautilus-open-with-menu.py` to `/usr/share/nautilus-python/extensio
 
 ## TODO
 
-* handle multiple files better
 * allow setting default via selection like the old version
 * find a way to replace the original "Open With Other Application" menu entry with that version
 * perhaps configuration?
