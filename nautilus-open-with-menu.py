@@ -7,7 +7,7 @@
 # Created: Mon Apr 18 17:50:46 2016 (+0200)
 # Version: 
 # Package-Requires: ()
-# Last-Updated: Mon Apr 18 19:38:22 2016 (+0200)
+# Last-Updated: Mon Apr 18 22:36:37 2016 (+0200)
 #           By: Lord Yuuma
 # URL: 
 # Doc URL: 
@@ -64,7 +64,6 @@ class NautilusOpenWithMenu(Nautilus.MenuProvider, GObject.GObject):
             mime_type = file.get_mime_type()
             for app_info in Gio.app_info_get_all_for_type(mime_type):
                 apps.append(app_info)
-        apps = list(set(apps))
 
         if len(apps) < 2:
             return []
