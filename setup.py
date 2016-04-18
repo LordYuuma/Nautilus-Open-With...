@@ -7,7 +7,7 @@
 # Created: Mon Apr 18 20:07:22 2016 (+0200)
 # Version: 
 # Package-Requires: ()
-# Last-Updated: Mon Apr 18 20:28:22 2016 (+0200)
+# Last-Updated: Mon Apr 18 23:17:19 2016 (+0200)
 #           By: Lord Yuuma
 # URL: 
 # Doc URL: 
@@ -45,7 +45,7 @@
 from setuptools import setup
 
 package = 'nautilus-open-with-menu'
-version = '0.1'
+version = '0.2'
 
 setup(name=package,
       version=version,
