@@ -7,7 +7,7 @@
 # Created: Mon Apr 18 17:50:46 2016 (+0200)
 # Version:
 # Package-Requires: ()
-# Last-Updated: Mon Apr 18 23:27:37 2016 (+0200)
+# Last-Updated: Sun May 15 00:56:58 2016 (+0200)
 #           By: Lord Yuuma
 # URL:
 # Doc URL:
@@ -45,8 +45,9 @@
 # Code:
 
 import gi
+gi.require_version('Gtk', '3.0')
 gi.require_version('Nautilus', '3.0')
-from gi.repository import Nautilus, GObject, Gio
+from gi.repository import Nautilus, GObject, Gio, Gtk
 
 from functools import reduce
 from operator import and_
@@ -92,8 +93,25 @@ class NautilusOpenWithMenu(Nautilus.MenuProvider, GObject.GObject):
             item.connect('activate', self.callback, app, files)
             sub_menu.append_item(item)
 
+        if len(mimetypes) == 1:
+            item = Nautilus.MenuItem(name="NautilusOpenWithMenu::set_default",
+                                     label="Set default")
+            item.connect('activate', self.set_default, window, mimetypes[0], files)
+            sub_menu.append_item(item)
+
         return [root_item]
 
     def callback(self, menu, app, files):
         fs = [Gio.File.new_for_uri(file.get_uri()) for file in files]
         app.launch(fs)
+
+    def set_default(self, menu, window, mimetype, files):
+        dialog = Gtk.AppChooserDialog.new_for_content_type(window, 0, mimetype)
+        result = dialog.run()
+        if result == Gtk.ResponseType.OK:
+            app = dialog.get_app_info()
+            if app:
+                fs = [Gio.File.new_for_uri(file.get_uri()) for file in files]
+                app.launch(fs)
+                app.set_as_default_for_type(mimetype)
+        dialog.destroy()
