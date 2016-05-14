@@ -7,7 +7,7 @@
 # Created: Mon Apr 18 17:50:46 2016 (+0200)
 # Version:
 # Package-Requires: ()
-# Last-Updated: Sun May 15 00:56:58 2016 (+0200)
+# Last-Updated: Sun May 15 01:11:05 2016 (+0200)
 #           By: Lord Yuuma
 # URL:
 # Doc URL:
@@ -98,6 +98,17 @@ class NautilusOpenWithMenu(Nautilus.MenuProvider, GObject.GObject):
                                      label="Set default")
             item.connect('activate', self.set_default, window, mimetypes[0], files)
             sub_menu.append_item(item)
+        else:
+            item = Nautilus.MenuItem(name="NautilusOpenWithMenu::set_default_for",
+                                     label="Set default for")
+            set_default = Nautilus.Menu()
+            item.set_submenu(set_default)
+            sub_menu.append_item(item)
+            for mimetype in mimetypes:
+                item = Nautilus.MenuItem(name="NautilusOpenWithMenu::set_default_for_{}".format(mimetype),
+                                         label=mimetype)
+                item.connect('activate', self.set_default, window, mimetype, files)
+                set_default.append_item(item)
 
         return [root_item]
 
@@ -111,7 +122,7 @@ class NautilusOpenWithMenu(Nautilus.MenuProvider, GObject.GObject):
         if result == Gtk.ResponseType.OK:
             app = dialog.get_app_info()
             if app:
-                fs = [Gio.File.new_for_uri(file.get_uri()) for file in files]
+                fs = [Gio.File.new_for_uri(file.get_uri()) for file in files if file.get_mime_type() == mimetype]
                 app.launch(fs)
                 app.set_as_default_for_type(mimetype)
         dialog.destroy()
